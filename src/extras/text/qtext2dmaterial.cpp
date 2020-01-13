@@ -50,6 +50,7 @@
 #include <Qt3DRender/qblendequation.h>
 #include <Qt3DRender/qblendequationarguments.h>
 #include <Qt3DRender/qdepthtest.h>
+#include <Qt3DRender/qnodepthmask.h>
 #include <Qt3DRender/qabstracttexture.h>
 #include <QUrl>
 #include <QVector3D>
@@ -66,6 +67,7 @@ QText2DMaterialPrivate::QText2DMaterialPrivate()
     , m_textureParameter(new Qt3DRender::QParameter(QStringLiteral("distanceFieldTexture"), QVariant(0)))
     , m_textureSizeParameter(new Qt3DRender::QParameter(QStringLiteral("textureSize"), QVariant(256.f)))
     , m_colorParameter(new Qt3DRender::QParameter(QStringLiteral("color"), QVariant(QColor(255, 255, 255, 255))))
+    , m_outlineWidthParameter(new Qt3DRender::QParameter(QStringLiteral("outlineWidth"), QVariant(0.0f)))
     , m_gl3Technique(new Qt3DRender::QTechnique())
     , m_gl2Technique(new Qt3DRender::QTechnique())
     , m_es2Technique(new Qt3DRender::QTechnique())
@@ -77,6 +79,7 @@ QText2DMaterialPrivate::QText2DMaterialPrivate()
     , m_blend(new Qt3DRender::QBlendEquation())
     , m_blendArgs(new Qt3DRender::QBlendEquationArguments())
     , m_depthTest(new Qt3DRender::QDepthTest())
+    , m_noDepthMask(new Qt3DRender::QNoDepthMask())
 {
 }
 
@@ -97,16 +100,19 @@ void QText2DMaterialPrivate::init()
     m_gl3RenderPass->addRenderState(m_blend);
     m_gl3RenderPass->addRenderState(m_blendArgs);
     m_gl3RenderPass->addRenderState(m_depthTest);
+    m_gl3RenderPass->addRenderState(m_noDepthMask);
 
     m_gl2RenderPass->setShaderProgram(m_gl2es2ShaderProgram);
     m_gl2RenderPass->addRenderState(m_blend);
     m_gl2RenderPass->addRenderState(m_blendArgs);
     m_gl2RenderPass->addRenderState(m_depthTest);
+    m_gl3RenderPass->addRenderState(m_noDepthMask);
 
     m_es2RenderPass->setShaderProgram(m_gl2es2ShaderProgram);
     m_es2RenderPass->addRenderState(m_blend);
     m_es2RenderPass->addRenderState(m_blendArgs);
     m_es2RenderPass->addRenderState(m_depthTest);
+    m_gl3RenderPass->addRenderState(m_noDepthMask);
 
     m_gl3Technique->graphicsApiFilter()->setApi(Qt3DRender::QGraphicsApiFilter::OpenGL);
     m_gl3Technique->graphicsApiFilter()->setMajorVersion(3);
@@ -139,6 +145,7 @@ void QText2DMaterialPrivate::init()
     m_effect->addParameter(m_textureParameter);
     m_effect->addParameter(m_textureSizeParameter);
     m_effect->addParameter(m_colorParameter);
+    m_effect->addParameter(m_outlineWidthParameter);
 
     q_func()->setEffect(m_effect);
 }
@@ -172,6 +179,12 @@ void QText2DMaterial::setDistanceFieldTexture(Qt3DRender::QAbstractTexture *tex)
         d->m_textureParameter->setValue(0);
         d->m_textureSizeParameter->setValue(QVariant::fromValue(1.f));
     }
+}
+
+void QText2DMaterial::setOutlineWidth(float outlineWidth)
+{
+    Q_D(QText2DMaterial);
+    d->m_outlineWidthParameter->setValue(QVariant::fromValue(outlineWidth));
 }
 
 } // namespace Qt3DExtras

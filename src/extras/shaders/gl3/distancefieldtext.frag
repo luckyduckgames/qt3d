@@ -5,11 +5,33 @@ uniform float minAlpha;
 uniform float maxAlpha;
 uniform float textureSize;
 uniform vec4 color;
+// LDG BEGIN
+uniform float outlineWidth;
+// LDG END
 
 in vec2 texCoord;
 in float zValue;
 
 out vec4 fragColor;
+
+
+// LDG BEGIN
+vec2 Outline(float distValue, float outlineWidth, float edgeAlpha)
+{
+    float halfOutlineWidth = outlineWidth * 0.5;
+    float outer = edgeAlpha - halfOutlineWidth;
+    float inner = edgeAlpha + halfOutlineWidth;
+
+    if (distValue < edgeAlpha) {
+        float f = smoothstep(outer, edgeAlpha, distValue);
+        return vec2(1, f);
+    }
+    float f = 1 - smoothstep(edgeAlpha, inner, distValue);
+    return vec2(f, 1) ;
+}
+// LDG END
+
+
 
 void main()
 {
@@ -34,6 +56,17 @@ void main()
     float maxAlpha = threshold + range;
 
     float distVal = texture(distanceFieldTexture, texCoord).r;
-    fragColor = color * smoothstep(minAlpha, maxAlpha, distVal);
+
+
+    vec4 final = vec4(color.rgb, color.a * smoothstep(minAlpha, maxAlpha, distVal));
+
+    // LDG BEGIN
+    // Outline
+    vec2 outline = Outline(distVal, outlineWidth, minAlpha);
+    final.rgb = mix(final.rgb, vec3(0, 0, 0), outline.x);
+    final.a = mix(final.a, outline.y, outline.x);
+    fragColor = final;
+    // LDG END
+
     gl_FragDepth = gl_FragCoord.z - zValue * 0.00001;
 }

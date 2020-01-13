@@ -151,6 +151,13 @@ void DistanceFieldTextRenderer::setColor(const QColor &color)
     d->m_material->setColor(color);
 }
 
+
+void DistanceFieldTextRenderer::setOutlineWidth(float outlineWidth)
+{
+    Q_D(DistanceFieldTextRenderer);
+    d->m_material->setOutlineWidth(outlineWidth);
+}
+
 } // namespace Qt3DExtras
 
 QT_END_NAMESPACE

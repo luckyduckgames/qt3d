@@ -71,7 +71,7 @@ public:
 
     void setColor(const QColor &color);
     void setDistanceFieldTexture(Qt3DRender::QAbstractTexture *tex);
-
+    void setOutlineWidth(float outlineWidth);
 private:
     Q_DECLARE_PRIVATE(QText2DMaterial)
 };

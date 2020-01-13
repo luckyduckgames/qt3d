@@ -144,6 +144,7 @@ QText2DEntityPrivate::QText2DEntityPrivate()
     , m_color(QColor(255, 255, 255, 255))
     , m_width(0.0f)
     , m_height(0.0f)
+    , m_outlineWidth(0.0f)
 {
 }
 
@@ -304,6 +305,7 @@ void QText2DEntityPrivate::setCurrentGlyphRuns(const QVector<QGlyphRun> &runs)
     while (m_renderers.size() < renderData.size()) {
         DistanceFieldTextRenderer *renderer = new DistanceFieldTextRenderer(q_func());
         renderer->setColor(m_color);
+        renderer->setOutlineWidth(m_outlineWidth);
         m_renderers << renderer;
     }
 
@@ -484,6 +486,31 @@ void QText2DEntity::setHeight(float height)
         d->update();
     }
 }
+
+
+
+
+
+float QText2DEntity::outlineWidth() const
+{
+    Q_D(const QText2DEntity);
+    return d->m_outlineWidth;
+}
+
+void QText2DEntity::setOutlineWidth(float outlineWidth)
+{
+    Q_D(QText2DEntity);
+    if (d->m_outlineWidth != outlineWidth) {
+        d->m_outlineWidth = outlineWidth;
+
+        emit outlineWidthChanged(outlineWidth);
+
+        for (DistanceFieldTextRenderer *renderer : qAsConst(d->m_renderers))
+            renderer->setOutlineWidth(outlineWidth);
+    }
+}
+
+
 
 } // namespace Qt3DExtras
 

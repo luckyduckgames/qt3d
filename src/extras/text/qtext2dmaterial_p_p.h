@@ -65,6 +65,7 @@ class QShaderProgram;
 class QBlendEquation;
 class QBlendEquationArguments;
 class QDepthTest;
+class QNoDepthMask;
 
 } // namespace Qt3DRender
 
@@ -82,6 +83,7 @@ public:
     Qt3DRender::QParameter *m_textureParameter;
     Qt3DRender::QParameter *m_textureSizeParameter;
     Qt3DRender::QParameter *m_colorParameter;
+    Qt3DRender::QParameter *m_outlineWidthParameter;
     Qt3DRender::QTechnique *m_gl3Technique;
     Qt3DRender::QTechnique *m_gl2Technique;
     Qt3DRender::QTechnique *m_es2Technique;
@@ -93,6 +95,7 @@ public:
     Qt3DRender::QBlendEquation *m_blend;
     Qt3DRender::QBlendEquationArguments *m_blendArgs;
     Qt3DRender::QDepthTest *m_depthTest;
+    Qt3DRender::QNoDepthMask *m_noDepthMask;
 
     void init();
 

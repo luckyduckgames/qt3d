@@ -98,6 +98,7 @@ public:
     QString m_text;
     float m_width;
     float m_height;
+    float m_outlineWidth;
 
     QVector<DistanceFieldTextRenderer*> m_renderers;
 

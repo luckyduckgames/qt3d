@@ -80,12 +80,16 @@ public:
     void setWidth(float width);
     void setHeight(float height);
 
+    float outlineWidth() const;
+    void setOutlineWidth(float outlineWidth);
+
 Q_SIGNALS:
     void fontChanged(const QFont &font);
     void colorChanged(const QColor &color);
     void textChanged(const QString &text);
     void widthChanged(float width);
     void heightChanged(float height);
+    void outlineWidthChanged(float height);
 
 private:
     Q_DECLARE_PRIVATE(QText2DEntity)

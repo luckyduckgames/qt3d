@@ -79,6 +79,7 @@ public:
                       const QVector<quint16> &indexData);
 
     void setColor(const QColor &color);
+    void setOutlineWidth(float outlineWidth);
 
     Q_DECLARE_PRIVATE(DistanceFieldTextRenderer)
 };
